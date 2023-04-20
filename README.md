@@ -1,9 +1,14 @@
+### Steps to start project
 ```bash
-# first
+# Install dependencies
+npm install
+```
+```bash
+# Start server side
 npm run start:server
 ```
 
 ```bash
-#second
+# Start client side
 npm run start:client
 ```
