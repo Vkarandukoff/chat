@@ -2,6 +2,8 @@ import http from "http";
 import express from "express";
 import { WebSocketServer } from "ws";
 import { Configuration, OpenAIApi } from "openai";
+import {config} from 'dotenv';
+config()
 
 const app = express();
 
@@ -10,7 +12,7 @@ const server = http.createServer(app);
 const webSocketServer = new WebSocketServer({ server });
 
 const configuration = new Configuration({
-  apiKey: "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",
+  apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
