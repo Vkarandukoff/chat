@@ -1,36 +1,21 @@
-import {WebSocket} from "ws";
+import io from 'socket.io-client';
 import { createInterface } from 'readline';
-import {PORT, secretKey} from "./constants.js";
-
+import {serverUrl} from "./constants.js";
 
 const readline = createInterface({
   input: process.stdin,
   output: process.stdout
 });
 
+const socket = io(serverUrl);
 
-const socket = new WebSocket(`ws://localhost:${PORT}`);
+readline.question('You: ', (message) => {
+  socket.emit('message', message);
+})
 
-socket.addEventListener('open', event => {
-  console.log('WebSocket connection established!');
-
-  readline.question('Enter secret key: ', key => {
-    if (key !== secretKey) {
-      console.log('Authentication failed! Closing connection...');
-      socket.close();
-      return;
-    }
-    console.log('Authentication successful!');
-    readline.question('You: ', message => {
-      socket.send(message);
-    });
-  });
-});
-
-socket.addEventListener('message', event => {
-  console.log('ChatGPT: ', event.data.toString());
-
-  readline.question('You: ', message => {
-    socket.send(message);
-  });
+socket.on('message', (message) => {
+  console.log('ChatGPT:', message);
+  readline.question('You: ', (message) => {
+    socket.emit('message', message)
+  })
 });
