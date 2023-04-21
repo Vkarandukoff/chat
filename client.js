@@ -1,13 +1,15 @@
 import {WebSocket} from "ws";
 import { createInterface } from 'readline';
+import {PORT, secretKey} from "./constants.js";
+
 
 const readline = createInterface({
   input: process.stdin,
   output: process.stdout
 });
 
-const secretKey = "1337";
-const socket = new WebSocket('ws://localhost:3000');
+
+const socket = new WebSocket(`ws://localhost:${PORT}`);
 
 socket.addEventListener('open', event => {
   console.log('WebSocket connection established!');

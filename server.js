@@ -2,17 +2,14 @@ import http from "http";
 import express from "express";
 import { WebSocketServer } from "ws";
 import { Configuration, OpenAIApi } from "openai";
-import {config} from 'dotenv';
-config()
+import {apiKey, PORT} from "./constants.js";
 
 const app = express();
-
 const server = http.createServer(app);
-
 const webSocketServer = new WebSocketServer({ server });
 
 const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey
 });
 const openai = new OpenAIApi(configuration);
 
@@ -29,8 +26,6 @@ webSocketServer.on('connection', ws => {
   });
 
   ws.on("error", e => ws.send(e));
-
-  // ws.send('Hi there, I am a WebSocket server!');
 });
 
-server.listen(3000, () => console.log("Server started"))
+server.listen(PORT, () => console.log("Server started"))
